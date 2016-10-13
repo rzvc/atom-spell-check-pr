@@ -63,7 +63,7 @@ class SpellCheckerManager
 
   emitSettingsChanged: ->
     if @isTask
-      emit("spell-check:settings-changed")
+      emit("spell-check-pr:settings-changed")
 
   addCheckerPath: (checkerPath) ->
     checker = require checkerPath

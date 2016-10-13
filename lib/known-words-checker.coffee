@@ -15,7 +15,7 @@ class KnownWordsChecker
   deactivate: ->
     return
 
-  getId: -> "spell-check:known-words"
+  getId: -> "spell-check-pr:known-words"
   getName: -> "Known Words"
   getPriority: -> 10
   isEnabled: -> @spelling.sensitive or @spelling.insensitive
@@ -43,9 +43,9 @@ class KnownWordsChecker
       []
 
   add: (args, target) ->
-    c = atom.config.get 'spell-check.knownWords'
+    c = atom.config.get 'spell-check-pr.knownWords'
     c.push target.word
-    atom.config.set 'spell-check.knownWords', c
+    atom.config.set 'spell-check-pr.knownWords', c
 
   setAddKnownWords: (newValue) ->
     @enableAdd = newValue

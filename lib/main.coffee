@@ -12,41 +12,41 @@ module.exports =
 
     # Set up our callback to track when settings changed.
     that = this
-    @task.on "spell-check:settings-changed", (ignore) ->
+    @task.on "spell-check-pr:settings-changed", (ignore) ->
       that.updateViews()
 
     # Since the spell-checking is done on another process, we gather up all the
     # arguments and pass them into the task. Whenever these change, we'll update
     # the object with the parameters and resend it to the task.
     @globalArgs = {
-      locales: atom.config.get('spell-check.locales'),
-      localePaths: atom.config.get('spell-check.localePaths'),
-      useLocales: atom.config.get('spell-check.useLocales'),
-      knownWords: atom.config.get('spell-check.knownWords'),
-      addKnownWords: atom.config.get('spell-check.addKnownWords'),
+      locales: atom.config.get('spell-check-pr.locales'),
+      localePaths: atom.config.get('spell-check-pr.localePaths'),
+      useLocales: atom.config.get('spell-check-pr.useLocales'),
+      knownWords: atom.config.get('spell-check-pr.knownWords'),
+      addKnownWords: atom.config.get('spell-check-pr.addKnownWords'),
       checkerPaths: []
     }
     @sendGlobalArgs()
 
-    atom.config.onDidChange 'spell-check.locales', ({newValue, oldValue}) ->
+    atom.config.onDidChange 'spell-check-pr.locales', ({newValue, oldValue}) ->
       that.globalArgs.locales = newValue
       that.sendGlobalArgs()
-    atom.config.onDidChange 'spell-check.localePaths', ({newValue, oldValue}) ->
+    atom.config.onDidChange 'spell-check-pr.localePaths', ({newValue, oldValue}) ->
       that.globalArgs.localePaths = newValue
       that.sendGlobalArgs()
-    atom.config.onDidChange 'spell-check.useLocales', ({newValue, oldValue}) ->
+    atom.config.onDidChange 'spell-check-pr.useLocales', ({newValue, oldValue}) ->
       that.globalArgs.useLocales = newValue
       that.sendGlobalArgs()
-    atom.config.onDidChange 'spell-check.knownWords', ({newValue, oldValue}) ->
+    atom.config.onDidChange 'spell-check-pr.knownWords', ({newValue, oldValue}) ->
       that.globalArgs.knownWords = newValue
       that.sendGlobalArgs()
-    atom.config.onDidChange 'spell-check.addKnownWords', ({newValue, oldValue}) ->
+    atom.config.onDidChange 'spell-check-pr.addKnownWords', ({newValue, oldValue}) ->
       that.globalArgs.addKnownWords = newValue
       that.sendGlobalArgs()
 
     # Hook up the UI and processing.
     @commandSubscription = atom.commands.add 'atom-workspace',
-        'spell-check:toggle': => @toggle()
+        'spell-check-pr:toggle': => @toggle()
     @viewsByEditor = new WeakMap
     @disposable = atom.workspace.observeTextEditors (editor) =>
       SpellCheckView ?= require './spell-check-view'

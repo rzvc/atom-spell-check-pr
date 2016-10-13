@@ -14,7 +14,7 @@ class SystemChecker
   deactivate: ->
     return
 
-  getId: -> "spell-check:" + @locale.toLowerCase().replace("_", "-")
+  getId: -> "spell-check-pr:" + @locale.toLowerCase().replace("_", "-")
   getName: -> "System Dictionary (" + @locale + ")"
   getPriority: -> 100 # System level data, has no user input.
   isEnabled: -> @enabled

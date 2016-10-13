@@ -1,5 +1,5 @@
 {
-  "name": "spell-check",
+  "name": "spell-check-pr",
   "version": "0.68.4",
   "main": "./lib/main",
   "description": "Highlights misspelled words and shows possible corrections.",
@@ -11,7 +11,7 @@
     "spelling-manager": "0.3.0",
     "underscore-plus": "^1"
   },
-  "repository": "https://github.com/atom/spell-check",
+  "repository": "https://github.com/rzvc/spell-check-pr",
   "license": "MIT",
   "engines": {
     "atom": "*"
@@ -28,6 +28,17 @@
       ],
       "description": "List of scopes for languages which will be checked for misspellings. See [the README](https://github.com/atom/spell-check#spell-check-package-) for more information on finding the correct scope for a specific language.",
       "order": "1"
+    },
+    "scopes": {
+      "type": "array",
+      "default": [],
+      "description": "List of specific scopes you want to be included when checking for misspellings. These scopes must be contained within the activated top-level scopes listed in the 'Grammars' configuration section. _When defined, spell checking will be ignored for any scope not listed._"
+    },
+    "scopeBlacklist": {
+      "type": "array",
+      "default": [
+        "markup.code.json.gfm"
+      ]
     },
     "useLocales": {
       "type": "boolean",

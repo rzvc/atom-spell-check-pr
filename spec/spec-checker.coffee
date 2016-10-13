@@ -14,7 +14,7 @@ class SpecChecker
   deactivate: ->
     return
 
-  getId: -> "spell-check:spec:" + @id
+  getId: -> "spell-check-pr:spec:" + @id
   getName: -> "Spec Checker"
   getPriority: -> 10
   isEnabled: -> true

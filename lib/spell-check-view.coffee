@@ -14,7 +14,7 @@ class SpellCheckView
     @initializeMarkerLayer()
     @taskWrapper = new SpellCheckTask @task
 
-    @correctMisspellingCommand = atom.commands.add atom.views.getView(@editor), 'spell-check:correct-misspelling', =>
+    @correctMisspellingCommand = atom.commands.add atom.views.getView(@editor), 'spell-check-pr:correct-misspelling', =>
       if marker = @markerLayer.findMarkers({containsBufferPosition: @editor.getCursorBufferPosition()})[0]
         CorrectionsView ?= require './corrections-view'
         @correctionsView?.destroy()
@@ -33,7 +33,7 @@ class SpellCheckView
     @disposables.add atom.config.onDidChange 'editor.fontSize', =>
       @subscribeToBuffer()
 
-    @disposables.add atom.config.onDidChange 'spell-check.grammars', =>
+    @disposables.add atom.config.onDidChange 'spell-check-pr.grammars', =>
       @subscribeToBuffer()
 
     @subscribeToBuffer()
@@ -74,7 +74,7 @@ class SpellCheckView
 
   spellCheckCurrentGrammar: ->
     grammar = @editor.getGrammar().scopeName
-    _.contains(atom.config.get('spell-check.grammars'), grammar)
+    _.contains(atom.config.get('spell-check-pr.grammars'), grammar)
 
   destroyMarkers: ->
     @markerLayer.destroy()
@@ -82,8 +82,37 @@ class SpellCheckView
     @initializeMarkerLayer()
 
   addMarkers: (misspellings) ->
+    scope_whitelist_full = atom.config.get('spell-check-pr.scopes')
+    scope_whitelist = []
+    single_whitelist = []
+    scope_blacklist = atom.config.get('spell-check-pr.scopeBlacklist')
+    
+    for scope in scope_whitelist_full
+      if scope[0] == '!'
+        single_whitelist.push(scope.substring(1));
+      else
+        scope_whitelist.push(scope);
+    
     for misspelling in misspellings
-      @markerLayer.markBufferRange(misspelling, {invalidate: 'touch'})
+      # Make sure the mispelling is an actual mispelling and not just code.
+      word = @editor.getTextInBufferRange(misspelling)
+      
+      if (word.match(/.[A-Z]|[-_]/))
+        continue;
+    
+      # Find scopes for the text given at the starting position of the misspelling
+      scopes_for_misspelling = @editor.scopeDescriptorForBufferPosition(misspelling[0]).getScopesArray()
+    
+      # Blacklist
+      if scope_blacklist.length and _.intersection(scopes_for_misspelling, scope_blacklist).length > 0
+        continue
+
+      # Whitelist
+      if scope_whitelist.length is 0 or _.intersection(scopes_for_misspelling, scope_whitelist).length > 0 or
+      scopes_for_misspelling.length == 1 and _.intersection(scopes_for_misspelling, single_whitelist).length == 1
+        @markerLayer.markBufferRange(misspelling, {invalidate: 'touch'})
+    return
+    
 
   updateMisspellings: ->
     # Task::start can throw errors atom/atom#3326

@@ -7,7 +7,7 @@
         'submenu': [
           {
             'label': 'Toggle'
-            'command': 'spell-check:toggle'
+            'command': 'spell-check-pr:toggle'
           }
         ]
       }
@@ -16,5 +16,5 @@
 ],
 'context-menu':
   'atom-text-editor:not([mini])': [
-    {label: 'Correct Spelling', command: 'spell-check:correct-misspelling'}
+    {label: 'Correct Spelling', command: 'spell-check-pr:correct-misspelling'}
   ]
