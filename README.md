@@ -26,3 +26,7 @@ For Windows 8 and 10, you must install the language using the regional settings 
 ## Plugins
 
 _Spell Check_ allows for plugins to provide additional spell checking functionality. See the `PLUGINS.md` file in the repository on how to write a plugin.
+
+## This fork
+
+The purpose of this fork is so I can apply a list of pull requests that have not been accepted yet and to make additional improvements until the package matures.
